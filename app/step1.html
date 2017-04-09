@@ -1,6 +1,90 @@
-<div>
-    First Name: <input type="text" ng-model="firstName"><br>
-    Last Name: <input type="text" ng-model="lastName"><br>
-    <br>
-    Full Name: {{firstName + " " + lastName}}
-</div>
+<form name="contactForm" id="contactForm"
+      enctype="multipart/form-data" method="POST" ng-submit="">
+
+    <scroll-to-top></scroll-to-top>
+    <form-nav steps="Onderwerp:active,Uw gegevens,Bedankt"></form-nav>
+
+    <div part="stage">
+        <div>
+            <fieldset>
+                <legend>Heeft u een vraag aan de ANWB?</legend>
+                <p>
+                    Voor het opzeggen of wijzigen van uw lidmaatschap kan dit formulier <b>niet</b> gebruikt worden.
+                    Neem hiervoor contact op met het
+                </p>
+            </fieldset>
+
+            <fieldset>
+
+                <legend>Heeft u een opmerking, vraag, suggestie of klacht?</legend>
+
+                <div >
+                    <label for="contactsoort">Ik heb een</label>
+
+                    <div>
+                        <div>
+                            <select ng-change="checkIris();" required="required" id="contactsoort" name="contactsoort"
+                                    ng-model="formFields.contactsoort">
+                                <option value="" selected disabled></option>
+                                <option value="opmerking">Opmerking</option>
+                                <option value="vraag">Vraag</option>
+                                <option value="suggestie">Suggestie</option>
+                                <option value="klacht">Klacht</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="universal-form-block">
+                    <label for="categorie" class="universal-form-label">Met betrekking tot</label>
+
+                    <div>
+                        <div>
+                            <select id="categorie" name="categorie"
+                                    ng-model="formFields.categorie"
+
+                                    required="required">
+                                <option value="" disabled selected>kies een categorie</option>
+
+                                <option value="Verzekeringen from exel">verzekering</option>
+                                <option value="wegenwacht">wegenwacht</option>
+                                <option value="vrijetijd">vrijetijd</option>
+                                <option value="advies">advies</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="universal-form-block">
+                    <label for="onderwerp" class="universal-form-label">Over het onderwerp</label>
+
+                    <div class="universal-form-fields">
+                        <div class="universal-form-selectbox">
+                            <select ng-change="checkIris();" id="onderwerp" name="onderwerp"
+                                    ng-if="formFields.categorie"
+                                    ng-model="formFields.onderwerp"
+                                   >
+                                <option value="factuur from exel">factuur</option>
+                                <option value="adres wijziging">adres</option>
+                                <option value="hulp">hulp</option>
+
+                                <option value="" disabled selected>kies een onderwerp</option>
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+
+        </div>
+    </div>
+
+    <div part="buttonBar">
+        <button id="odNextStep" ng-click="nextStep('step2')" type="submit">
+            <span>Verder</span>
+        </button>
+    </div>
+
+
+</form>

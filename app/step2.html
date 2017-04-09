@@ -1,84 +1,209 @@
-<form name="contactForm" id="contactForm"
-      enctype="multipart/form-data" method="POST" ng-submit="">
+<form class="universal-form ws-validate view-animate-container" name="contactForm" id="contactForm"
+      enctype="multipart/form-data" method="POST" ng-submit="" backend-validation="backend-validation">
 
     <scroll-to-top></scroll-to-top>
-    <form-nav steps="Onderwerp:active,Uw gegevens,Bedankt"></form-nav>
+    <form-nav steps="Onderwerp,Uw gegevens:active,Bedankt"></form-nav>
 
-    <div part="stage">
-        <div>
-            <fieldset>
-                <legend>Heeft u een vraag aan de ANWB?</legend>
-                <p>
-                    Voor het opzeggen of wijzigen van uw lidmaatschap kan dit formulier <b>niet</b> gebruikt worden.
-                    Neem hiervoor contact op met het
-                </p>
-            </fieldset>
+    <div>
 
-            <fieldset>
+        <fieldset>
 
-                <legend>Heeft u een opmerking, vraag, suggestie of klacht?</legend>
+            <legend>Uw gegevens</legend>
 
-                <div >
-                    <label for="contactsoort">Ik heb een</label>
+            <div class="universal-form-block text">
+                <label class="universal-form-label" for="omschrijving">
+                    <span ng-if="formFields.contactsoort" class="animate-if">Uw {{formFields.contactsoort}}</span>
+                    <span ng-if="!formFields.contactsoort" class="animate-if">Uw Bericht</span>
+                </label>
 
-                    <div>
-                        <div>
-                            <select ng-change="checkIris();" required="required" id="contactsoort" name="contactsoort"
-                                    ng-model="formFields.contactsoort">
-                                <option value="" selected disabled></option>
-                                <option value="opmerking">Opmerking</option>
-                                <option value="vraag">Vraag</option>
-                                <option value="suggestie">Suggestie</option>
-                                <option value="klacht">Klacht</option>
-                            </select>
+                <div class="universal-form-fields">
+                    <textarea name="omschrijving" id="omschrijving" rows="6" maxlength="2000"
+                              ng-model="formFields.omschrijving" placeholder="" required="required"></textarea>
+                </div>
+            </div>
+
+            <div class="universal-form-block">
+                <label class="universal-form-label">Bijlage
+                    <div class="tooltip"><img class="trigger" alt="help"
+                                              src="/static/apps/core/images/tooltip/info-icon_22x22.png">
+
+                        <div class="info-balloon">
+                            <p>U kunt &eacute;&eacute;n of meer bijlagen bijsluiten, tot maximaal 5 MB bij elkaar, in de
+                                volgende bestandsformaten: jpg, tif, doc, docx of pdf. Indien u een Excel bestand wilt
+                                bijvoegen, slaat u deze eerst op in pdf formaat. Indien u een verkeerd bestand heeft
+                                geselecteerd hoeft u deze niet te verwijderen, maar kunt u deze vervangen door het
+                                juiste bestand te selecteren. Indien u meerdere bijlagen wilt uploaden, doet u dit door
+                                meerdere bijlagen tegelijkertijd te selecteren.</p>
                         </div>
                     </div>
+                </label>
+
+                <div class="universal-form-fields">
+                    <input label="upload" id="upload" name="upload" multiple="" type="file"
+                           file-model="formFields.upload" ng-model="formFields.upload" file-model-max-size="5000000"
+                           accepted-formats="image/*,pdf,vnd.openxmlformats-officedocument.wordprocessingml.document,msword">
+
+                    <div ng-repeat="file in formFields.upload" class="filenames">{{file.name}}</div>
                 </div>
+            </div>
 
-                <div class="universal-form-block">
-                    <label for="categorie" class="universal-form-label">Met betrekking tot</label>
+        </fieldset>
 
-                    <div>
-                        <div>
-                            <select id="categorie" name="categorie"
-                                    ng-model="formFields.categorie"
-                                    ng-options="item.naam for item in formLogic.config.rubrieken track by item.naam"
-                                    required="required">
-                                <option value="" disabled selected>kies een categorie</option>
-                            </select>
+        <fieldset>
+
+            <legend>Uw persoonlijke gegevens</legend>
+            <p ng-if="formFields.islid">
+                U bent ingelogd. We hebben de bij ons bekende gegevens al ingevuld.
+            </p>
+
+            <div class="universal-form-block checkboxes">
+                <label class="universal-form-label">Bent u ANWB-lid? </label>
+
+                <div class="universal-form-fields">
+                    <label>
+                        <input id="islid_ja" name="islid" ng-model="formFields.islid" value="lid_ja" required="required"
+                               type="radio"> ja
+                    </label>
+                    <label>
+                        <input id="islid_nee" name="islid" ng-model="formFields.islid" value="lid_nee"
+                               required="required" type="radio"> nee
+                    </label>
+                </div>
+            </div>
+
+            <div class="universal-form-block animate-if" ng-if="formFields.islid === 'lid_ja'">
+                <label class="universal-form-label" for="lidnummer">Lidmaatschapsnummer</label>
+
+                <div class="universal-form-fields">
+                    <input id="lidnummer" name="lidnummer" ng-model="formFields.lidnummer" placeholder="" maxlength="30"
+                           title="Gebruik een geldig lidmaatschapsnummer (9 of 10 cijfers)."
+                           pattern="[0-9]{0,1}[1-9]{1}[0-9]{8}" type="text" required="required">
+                </div>
+            </div>
+
+            <div class="universal-form-block checkboxes">
+                <label class="universal-form-label">Aanhef</label>
+
+                <div class="universal-form-fields">
+                    <label>
+                        <input id="aanhefdhr" name="aanhef" ng-model="formFields.aanhef" value="mr" required="required"
+                               type="radio"> Dhr.</label>
+                    <label>
+                        <input id="aanhefmevr" name="aanhef" ng-model="formFields.aanhef" value="mrs"
+                               required="required" type="radio"> Mevr.</label>
+                </div>
+            </div>
+
+            <div class="universal-form-block universal-form-block-half">
+                <label for="initialen" class="universal-form-label">Voorletter(s)</label>
+
+                <div class="universal-form-fields">
+                    <label>
+                        <input id="initialen" name="initialen" ng-model="formFields.initialen"
+                               placeholder="Voorletter(s)" title="Voorletters"
+                               pattern="([a-zA-Z\u00c0-\u02AF]([\.])?){1,6}" maxlength="10" type="text"
+                               required="required">
+                    </label>
+                    <label>
+                        <input id="tussenvoegsels" name="tussenvoegsels" ng-model="formFields.tussenvoegsels"
+                               placeholder="Tussenvoegsel" maxlength="12" title="Alleen letters."
+                               pattern="^([a-zA-Z\s\-'\.]){0,10}$" type="text">
+                    </label>
+                </div>
+            </div>
+
+            <div class="universal-form-block">
+                <label for="initialen" class="universal-form-label">Achternaam</label>
+
+                <div class="universal-form-fields">
+                    <input id="achternaam" name="achternaam" ng-model="formFields.achternaam" placeholder="Achternaam"
+                           title="Alleen letters." maxlength="30" required="required"
+                           pattern="^[a-zA-Z\u00c0-\u02AF]{1}[a-zA-Z\s\-'\.\u00c0-\u02AF]{0,29}$" type="text">
+                </div>
+            </div>
+
+            <div class="universal-form-block universal-form-block-half">
+                <label for="huisnummer" class="universal-form-label">Huisnummer en toevoeging</label>
+
+                <div class="universal-form-fields">
+                    <label>
+                        <input id="huisnummer" name="huisnummer" ng-model="formFields.huisnummer" placeholder="29"
+                               min="1" max="99999" class="small" title="Tussen de 1 en 5 cijfers" type="number">
+                    </label>
+                    <label>
+                        <span class="universal-form-label-text">Huisnummertoevoeging</span>
+                        <input id="toevoeging" name="toevoeging" ng-model="formFields.toevoeging" placeholder="A"
+                               maxlength="6" class="tiny" type="text">
+                    </label>
+                </div>
+            </div>
+
+            <div class="universal-form-block">
+                <label for="postcode" class="universal-form-label">Postcode</label>
+
+                <div class="universal-form-fields">
+                    <input id="postcode" name="postcode" ng-model="formFields.postcode" placeholder="2717CL"
+                           maxlength="7" pattern="^[1-9][0-9]{3}[ ]{0,1}[a-zA-Z]{2}$" class="small"
+                           title="Gebruik een geldige postcode: 4 cijfers en 2 letters." type="text">
+                </div>
+            </div>
+
+            <div class="universal-form-block">
+                <label for="telefoon" class="universal-form-label">Telefoonnummer</label>
+
+                <div class="universal-form-fields">
+                    <input id="telefoon" name="telefoon" ng-model="formFields.telefoon" maxlength="24"
+                           placeholder="012-3456789" required="required" pattern="[0-9+][\-\.0-9/ ]*"
+                           title="Gebruik een geldig telefoonnummer. Bijvoorbeeld 012-3456789" type="tel">
+                </div>
+            </div>
+
+            <div class="universal-form-block">
+                <label for="email" class="universal-form-label">
+                    E-mailadres
+                    <div class="tooltip">
+                        <img class="trigger" alt="help" src="/static/apps/core/images/tooltip/info-icon_22x22.png">
+
+                        <div class="info-balloon">
+                            <h3>E-mailadres</h3>
+
+                            <p>Uw e-mailadres is nodig om u een bevestiging te sturen.</p>
                         </div>
                     </div>
+                </label>
+
+                <div class="universal-form-fields">
+                    <input id="email" name="email" ng-model="formFields.email" maxlength="50" required="required"
+                           title="Bijvoorbeeld: naam@uwdomein.nl"
+                           pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" type="email">
                 </div>
-
-                <div class="universal-form-block">
-                    <label for="onderwerp" class="universal-form-label">Over het onderwerp</label>
-
-                    <div class="universal-form-fields">
-                        <div class="universal-form-selectbox">
-                            <select ng-change="checkIris();" id="onderwerp" name="onderwerp"
-                                    ng-if="formFields.categorie"
-                                    ng-model="formFields.onderwerp"
-                                    ng-options="currOption for currOption in (formLogic.config.rubrieken | filter: { naam:  (formFields.categorie.naam) })[0].onderwerpen track by currOption"
-                                    required="required">
-                                <option value="" disabled selected>kies een onderwerp</option>
-                            </select>
-                            <select ng-if="!formFields.categorie" class="animate-if" required="required">
-                                <option>kies eerst een categorie</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-            </fieldset>
-
-        </div>
+            </div>
+        </fieldset>
     </div>
 
-    <div part="buttonBar">
-        <button id="odNextStep" ng-click="nextStep('step2')" type="submit">
-            <span>Verder</span>
+    <div class="buttonBar" part="buttonBar">
+        <button class="groot secundair" id="odPrevStep" ng-click="prevStep('step1');" type="submit">
+            <span>Terug</span>
+        </button>
+        <button class="groot" id="odNextStep" ng-click="submitForm();" type="submit"
+                ng-disabled="formLogic.submittingData">
+            <span>Verzenden</span>
         </button>
     </div>
-
+    <fieldset ng-if="formLogic.submittingData && !formLogic.dataSubmitted" class="animate-if">
+        <div>
+			<span class="animate-if loading_dots">
+				Bezig met verzenden
+			</span>
+        </div>
+    </fieldset>
+    <fieldset ng-if="formLogic.dataSubmitted" class="animate-if">
+        <div>
+			<span>
+				Uw {{formFields.contactsoort}} is verzonden
+			</span>
+        </div>
+    </fieldset>
 
 </form>
+
