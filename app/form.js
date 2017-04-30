@@ -2,9 +2,9 @@
     angular
         .module('contactform')
         .controller('FormCtrl', formCtrl);
-    formCtrl.$inject = ['$scope', '$state'];
+    formCtrl.$inject = ['$scope', '$state', 'iris'];
 
-    function formCtrl($scope, $state) {
+    function formCtrl($scope, $state, iris) {
         // function to change ui state to next page
         $scope.nextStep = function (location) {
 
@@ -15,6 +15,7 @@
         };
 
         $scope.checkIris = function () {
+            iris.initIris();
             window.alert("checkIrisCalled");
 
         };

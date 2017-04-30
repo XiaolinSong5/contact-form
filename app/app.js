@@ -1,7 +1,7 @@
 (function (){
 
 	angular
-		.module('contactform', ['ngAnimate','ui.router','ngSanitize'])
+		.module('contactform', ['ngAnimate','ui.router','ngSanitize', 'anwbServices'])
 		.config(appRouting);
 
 	appRouting.$inject = ['$stateProvider', '$urlRouterProvider'];
