@@ -16,9 +16,16 @@
 
         $scope.checkIris = function () {
             iris.initIris();
-            window.alert("checkIrisCalled");
+            $scope.formLogic.irisActive = true;
+          //  window.alert("checkIrisCalled");
 
         };
+        function init() {
+
+            $scope.formFields = {};
+            $scope.formLogic = {};
+        }
+        init();
     }
   
 }());
